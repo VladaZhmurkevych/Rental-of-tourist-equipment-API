@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
+import {AppModule} from '../../../app.module';
 
-describe('AppController (e2e)', () => {
+describe('EquipmentController (e2e)', () => {
   let app;
 
   beforeEach(async () => {
@@ -14,9 +14,9 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('should return Hello on /equipment/all (GET)', () => {
+  it('should return Hello on /equipment (GET)', () => {
     return request(app.getHttpServer())
-        .get('/equipment/all')
-        .expect("Hello")
-  })
+        .get('/equipment')
+        .expect('Hello');
+  });
 });

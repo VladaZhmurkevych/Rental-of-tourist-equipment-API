@@ -4,6 +4,10 @@
   "description": "",
   "author": "",
   "license": "MIT",
+  "husky": {
+    "pre-commit": "npm run lint",
+    "pre-push": "npm run lunt && npm test"
+  },
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -22,12 +26,18 @@
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
     "@nestjs/platform-express": "^6.0.0",
+    "dotenv": "^8.1.0",
+    "husky": "^3.0.5",
+    "nestjs-dotenv": "^1.0.1",
+    "pg": "^7.12.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "typeorm": "^0.2.19"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",
+    "@types/dotenv": "^6.1.1",
     "@types/express": "4.16.1",
     "@types/jest": "24.0.11",
     "@types/node": "11.13.4",
