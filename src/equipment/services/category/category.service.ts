@@ -4,12 +4,19 @@ import { Category } from '../../entities/category.entity';
 
 @Injectable()
 export class CategoryService {
-    constructor(
-        @Inject('CATEGORIES_REPOSITORY')
-        private readonly categoriesRepository: Repository<Category>,
-    ) {}
+  constructor(
+    @Inject('CATEGORIES_REPOSITORY')
+    private readonly categoriesRepository: Repository<Category>,
+  ) {}
 
-    async findAll(): Promise<Category[]> {
-        return await this.categoriesRepository.find();
-    }
+  findAll(): Promise<Category[]> {
+    return this.categoriesRepository.find();
+  }
+
+  getCategoryIdByName(name: string): Promise<number> {
+    return this.categoriesRepository.findOne({
+      select: ['id'],
+      where: { name },
+    }).then((category: Category) => category.id);
+  }
 }
