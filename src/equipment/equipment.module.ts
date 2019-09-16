@@ -4,7 +4,7 @@ import {EquipmentService} from './services/equipment/equipment.service';
 import {categoriesProviders} from './providers/category.providers';
 import {DataBaseModule} from '../data-base/data-base.module';
 import {CategoryService} from './services/category/category.service';
-import {ConfigModule} from "nestjs-dotenv";
+import {ConfigModule} from 'nestjs-dotenv';
 
 @Module({
     imports: [DataBaseModule, ConfigModule.forRoot()],

@@ -5,8 +5,10 @@
   "author": "",
   "license": "MIT",
   "husky": {
-    "pre-commit": "npm run lint",
-    "pre-push": "npm run lunt && npm test"
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lunt && npm test"
+    }
   },
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",

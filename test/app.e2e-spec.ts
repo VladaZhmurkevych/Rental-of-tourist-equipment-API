@@ -17,6 +17,6 @@ describe('AppController (e2e)', () => {
   it('should return Hello on /equipment/all (GET)', () => {
     return request(app.getHttpServer())
         .get('/equipment/all')
-        .expect("Hello")
-  })
+        .expect('Hello');
+  });
 });

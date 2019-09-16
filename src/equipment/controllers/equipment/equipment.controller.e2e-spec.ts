@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import {AppModule} from '../../../app.module';
+import { AppModule } from '../../../app.module';
 
 describe('EquipmentController (e2e)', () => {
   let app;
@@ -16,7 +16,7 @@ describe('EquipmentController (e2e)', () => {
 
   it('should return Hello on /equipment (GET)', () => {
     return request(app.getHttpServer())
-        .get('/equipment')
-        .expect('Hello');
+      .get('/equipment')
+      .expect('Hello');
   });
 });
