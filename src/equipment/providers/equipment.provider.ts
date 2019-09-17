@@ -1,6 +1,6 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 import { Equipment } from '../entities/equipment.entity';
-import { DataBaseConnection } from '../../data-base/database.connection';
+import { DataBaseConnection } from '../../database/database.connection';
 
 export const equipmentsProvider = {
   provide: 'EQUIPMENTS_REPOSITORY',
