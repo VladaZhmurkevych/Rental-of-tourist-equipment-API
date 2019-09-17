@@ -6,6 +6,7 @@ import {DataBaseModule} from '../data-base/data-base.module';
 import {CategoryService} from './services/category/category.service';
 import {ConfigModule} from 'nestjs-dotenv';
 import {equipmentsProvider} from './providers/equipment.provider';
+import { EquipmentRepositoryService } from './data_services/equipment.repository.service';
 
 @Module({
     imports: [DataBaseModule, ConfigModule.forRoot()],
@@ -13,6 +14,7 @@ import {equipmentsProvider} from './providers/equipment.provider';
     providers: [
       categoriesProvider,
       equipmentsProvider,
+      EquipmentRepositoryService,
       CategoryService,
       EquipmentService,
     ],

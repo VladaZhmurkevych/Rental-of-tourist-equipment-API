@@ -13,11 +13,9 @@ export class EquipmentDto {
   @IsString()
   readonly description: string;
 
-  @IsNotEmpty()
   @IsNumber()
   readonly rentPricePerHour?: number;
 
-  @IsNotEmpty()
   @IsNumber()
   readonly rentPricePerDay?: number;
 
@@ -25,7 +23,6 @@ export class EquipmentDto {
   @IsNumber()
   readonly originalPrice: number;
 
-  @IsNotEmpty()
   @IsString()
   readonly mainPhoto?: string;
 }

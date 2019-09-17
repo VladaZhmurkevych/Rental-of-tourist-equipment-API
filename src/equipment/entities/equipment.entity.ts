@@ -1,12 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Category } from './category.entity';
 
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'integer' })
-  categoryId: number;
+  @OneToOne(type => Category)
+  @JoinColumn()
+  category: Category;
 
   @Column({ length: 255 })
   name: string;

@@ -1,4 +1,4 @@
-import { Equipment } from '../../entities/equipment.entity';
+import { Equipment } from '../entities/equipment.entity';
 
 export class EquipmentBuilder {
   private readonly equipment = null;

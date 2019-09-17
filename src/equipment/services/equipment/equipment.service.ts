@@ -1,52 +1,35 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { Equipment } from '../../entities/equipment.entity';
 import { EquipmentDto } from '../../dto/equipment.dto';
-import { EquipmentBuilder } from './equipment.builder';
 import { CategoryService } from '../category/category.service';
+import { EquipmentRepositoryService } from '../../data_services/equipment.repository.service';
 
 @Injectable()
 export class EquipmentService {
   constructor(
-    @Inject('EQUIPMENTS_REPOSITORY')
-    private readonly equipmentRepository: Repository<Equipment>,
+    private readonly equipmentRepositoryService: EquipmentRepositoryService,
     private categoryService: CategoryService,
   ) {}
 
   getOneById(id: number): Promise<Equipment> {
-    return this.equipmentRepository.findOne(id);
+    return this.equipmentRepositoryService.findById(id);
   }
 
   getAll(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+    return this.equipmentRepositoryService.findAll();
   }
 
   getMany(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+    return this.equipmentRepositoryService.findMany();
   }
 
   async addEquipment(equipmentDto: EquipmentDto): Promise<Equipment> {
     const categoryId = await this.categoryService.getCategoryIdByName(
       equipmentDto.categoryName,
     );
-    const equipmentBuilder = new EquipmentBuilder();
-
-    equipmentBuilder
-      .addName(equipmentDto.name)
-      .addCategory(categoryId)
-      .addRentOriginalPrice(equipmentDto.originalPrice)
-      .addDescription(equipmentDto.description);
-
-    if (equipmentDto.rentPricePerDay) {
-      equipmentBuilder.addRentPricePerDay(equipmentDto.rentPricePerDay);
-    }
-    if (equipmentDto.rentPricePerHour) {
-      equipmentBuilder.addRentPricePerDay(equipmentDto.rentPricePerHour);
-    }
-    if (equipmentDto.mainPhoto) {
-      equipmentBuilder.addMainPhoto(equipmentDto.mainPhoto);
-    }
-    const equipment = equipmentBuilder.getEquipment();
-    return this.equipmentRepository.save(equipment);
+    return this.equipmentRepositoryService.createOne(
+      equipmentDto,
+      categoryId,
+    );
   }
 }
