@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult, LessThan } from 'typeorm';
-import { EquipmentBuilder } from './equipment.builder';
+import { EquipmentBuilder } from '../utils/equipment.builder';
 import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
 import { EquipmentUpdateDto } from '../dto/equipment_update.dto';

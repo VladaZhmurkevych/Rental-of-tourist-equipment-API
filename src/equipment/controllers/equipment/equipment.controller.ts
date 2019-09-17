@@ -15,7 +15,7 @@ import { EquipmentService } from '../../services/equipment/equipment.service';
 import { EquipmentDto } from '../../dto/equipment.dto';
 import { SingleItemParamsDto } from '../../dto/single_item_params.dto';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
-import {SearchDto} from '../../dto/search.dto';
+import { SearchDto } from '../../dto/search.dto';
 
 @Controller('equipment')
 export class EquipmentController {
@@ -85,9 +85,15 @@ export class EquipmentController {
   }
 
   @Put(':id')
-  async updateItem( @Param() params: SingleItemParamsDto, @Body() equipmentUpdateDto: EquipmentUpdateDto) {
+  async updateItem(
+    @Param() params: SingleItemParamsDto,
+    @Body() equipmentUpdateDto: EquipmentUpdateDto,
+  ) {
     try {
-      return await this.equipmentService.updateOne(equipmentUpdateDto, params.id);
+      return await this.equipmentService.updateOne(
+        equipmentUpdateDto,
+        params.id,
+      );
     } catch (e) {
       throw new HttpException(
         'Internal Server Error',

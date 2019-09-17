@@ -5,8 +5,8 @@ import { CategoryService } from '../category/category.service';
 import { EquipmentRepositoryService } from '../../data_services/equipment.repository.service';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
 import { ObjectLiteral } from 'typeorm';
-import {SearchDto} from '../../dto/search.dto';
-import {mapSearchDtoToFindOperators} from '../../data_services/equipment.helpers';
+import { SearchDto } from '../../dto/search.dto';
+import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
 
 @Injectable()
 export class EquipmentService {
@@ -29,7 +29,10 @@ export class EquipmentService {
     return { status: 'success', affected: deleteResult.affected };
   }
 
-  async updateOne(updateData: EquipmentUpdateDto, id: number): Promise<{ status: string; entity: ObjectLiteral }> {
+  async updateOne(
+    updateData: EquipmentUpdateDto,
+    id: number,
+  ): Promise<{ status: string; entity: ObjectLiteral }> {
     await this.equipmentRepositoryService.updateOne(id, updateData);
     const updatedEntity = await this.equipmentRepositoryService.findById(id);
     return { status: 'success', entity: updatedEntity };

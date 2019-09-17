@@ -14,9 +14,11 @@ export class CategoryService {
   }
 
   getCategoryIdByName(name: string): Promise<number> {
-    return this.categoriesRepository.findOne({
-      select: ['id'],
-      where: { name },
-    }).then((category: Category) => category.id);
+    return this.categoriesRepository
+      .findOne({
+        select: ['id'],
+        where: { name },
+      })
+      .then((category: Category) => category.id);
   }
 }

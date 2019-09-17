@@ -1,20 +1,5 @@
-import { SearchDto } from '../dto/search.dto';
-import {
-  FindOperator,
-  In,
-  Like,
-  Between,
-  MoreThanOrEqual,
-  LessThanOrEqual,
-} from 'typeorm';
-
-export interface SearchQuery {
-  categoryId?: FindOperator<number[]>;
-  name?: FindOperator<string>;
-  rentPricePerHour?: FindOperator<number>;
-  rentPricePerDay?: FindOperator<number>;
-  originalPrice?: FindOperator<number>;
-}
+import { SearchQuery } from '../interfaces/search.query.interface';
+import { Between, In, LessThanOrEqual, Like, MoreThanOrEqual } from 'typeorm';
 
 export class SearchQueryBuilder {
   private searchQuery: SearchQuery = {};
@@ -58,21 +43,3 @@ export class SearchQueryBuilder {
     return this.searchQuery;
   }
 }
-
-export const mapSearchDtoToFindOperators = (search: SearchDto) => {
-  const searchQueryBuilder = new SearchQueryBuilder();
-
-  searchQueryBuilder
-    .addOriginalPrice(search.originalPriceFrom, search.originalPriceTo)
-    .addPricePerDay(search.rentPricePerDayFrom, search.rentPricePerDayTo)
-    .addPricePerHour(search.rentPricePerHourFrom, search.rentPricePerHourTo);
-
-  if (search.categoryId) {
-    searchQueryBuilder.addCategoryId(search.categoryId);
-  }
-  if (search.name) {
-    searchQueryBuilder.addName(search.name);
-  }
-
-  return searchQueryBuilder.getSearchQuery();
-};
