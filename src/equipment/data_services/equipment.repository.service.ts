@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { EquipmentBuilder } from './equipment.builder';
 import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
+import { EntityUpdateInterface } from './entity.update.interface';
+import { EquipmentUpdateDto } from '../dto/equipment_update.dto';
 
 @Injectable()
 export class EquipmentRepositoryService {
@@ -23,7 +25,18 @@ export class EquipmentRepositoryService {
     return this.equipmentRepository.find();
   }
 
-  async createOne(equipmentDto: EquipmentDto, categoryId: number): Promise<Equipment> {
+  deleteById(id: number): Promise<DeleteResult> {
+    return this.equipmentRepository.delete(id);
+  }
+
+  updateOne(id: number, updateData: EquipmentUpdateDto): Promise<UpdateResult> {
+    return this.equipmentRepository.update(id, updateData);
+  }
+
+  async createOne(
+    equipmentDto: EquipmentDto,
+    categoryId: number,
+  ): Promise<Equipment> {
     const equipmentBuilder = new EquipmentBuilder();
 
     equipmentBuilder

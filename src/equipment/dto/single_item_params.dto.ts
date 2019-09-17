@@ -1,6 +1,6 @@
 import { IsNumberString } from 'class-validator';
 
-export class GetSingleItemParamsDto {
+export class SingleItemParamsDto {
   @IsNumberString()
   readonly id: number;
 }

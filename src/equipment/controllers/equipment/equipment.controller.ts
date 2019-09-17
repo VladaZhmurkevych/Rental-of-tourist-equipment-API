@@ -12,7 +12,8 @@ import {
 import { CategoryService } from '../../services/category/category.service';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { EquipmentDto } from '../../dto/equipment.dto';
-import { GetSingleItemParamsDto } from '../../dto/get_single_item_params.dto';
+import { SingleItemParamsDto } from '../../dto/single_item_params.dto';
+import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
 
 @Controller('equipment')
 export class EquipmentController {
@@ -34,7 +35,7 @@ export class EquipmentController {
   }
 
   @Get(':id')
-  async getSingleItem(@Param() params: GetSingleItemParamsDto) {
+  async getSingleItem(@Param() params: SingleItemParamsDto) {
     try {
       return await this.equipmentService.getOneById(params.id);
     } catch (e) {
@@ -69,10 +70,10 @@ export class EquipmentController {
     }
   }
 
-  @Delete()
-  deleteItem() {
+  @Delete(':id')
+  async deleteItem(@Param() params: SingleItemParamsDto) {
     try {
-      return 'Hello';
+      return await this.equipmentService.deleteOne(params.id);
     } catch (e) {
       throw new HttpException(
         'Internal Server Error',
@@ -81,10 +82,10 @@ export class EquipmentController {
     }
   }
 
-  @Put()
-  updateItem() {
+  @Put(':id')
+  async updateItem( @Param() params: SingleItemParamsDto, @Body() equipmentUpdateDto: EquipmentUpdateDto) {
     try {
-      return 'Hello';
+      return await this.equipmentService.updateOne(equipmentUpdateDto, params.id);
     } catch (e) {
       throw new HttpException(
         'Internal Server Error',
