@@ -4,7 +4,7 @@ import { EquipmentDto } from '../../dto/equipment.dto';
 import { CategoryService } from '../category/category.service';
 import { EquipmentRepositoryService } from '../../data_services/equipment.repository.service';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
-import { ObjectLiteral } from 'typeorm';
+import { ObjectLiteral, QueryFailedError } from 'typeorm';
 import { SearchDto } from '../../dto/search.dto';
 import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
 import { CategoryError } from '../../utils/category.error';
@@ -34,7 +34,15 @@ export class EquipmentService {
     updateData: EquipmentUpdateDto,
     id: number,
   ): Promise<{ status: string; entity: ObjectLiteral }> {
-    await this.equipmentRepositoryService.updateOne(id, updateData);
+    try {
+      await this.equipmentRepositoryService.updateOne(id, updateData);
+    } catch (e) {
+      if (e instanceof QueryFailedError) {
+        throw new CategoryError();
+      } else {
+        throw e;
+      }
+    }
     const updatedEntity = await this.equipmentRepositoryService.findById(id);
     return { status: 'success', entity: updatedEntity };
   }
@@ -43,7 +51,9 @@ export class EquipmentService {
     const category = await this.categoryService.getCategoryByName(
       equipmentDto.categoryName,
     );
-    if (!category) { throw new CategoryError(); }
+    if (!category) {
+      throw new CategoryError();
+    }
     return this.equipmentRepositoryService.createOne(equipmentDto, category);
   }
 }

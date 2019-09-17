@@ -115,10 +115,14 @@ export class EquipmentController {
         params.id,
       );
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }
