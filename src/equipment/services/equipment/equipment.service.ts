@@ -5,6 +5,8 @@ import { CategoryService } from '../category/category.service';
 import { EquipmentRepositoryService } from '../../data_services/equipment.repository.service';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
 import { ObjectLiteral } from 'typeorm';
+import {SearchDto} from '../../dto/search.dto';
+import {mapSearchDtoToFindOperators} from '../../data_services/equipment.helpers';
 
 @Injectable()
 export class EquipmentService {
@@ -17,17 +19,9 @@ export class EquipmentService {
     return this.equipmentRepositoryService.findById(id);
   }
 
-  getAll(): Promise<Equipment[]> {
-    return this.equipmentRepositoryService.findAll();
-  }
-
-  search(): Promise<Equipment[]> {
-    return this.equipmentRepositoryService.findAll();
-  }
-
-
-  getMany(): Promise<Equipment[]> {
-    return this.equipmentRepositoryService.findMany();
+  search(search: SearchDto): Promise<Equipment[]> {
+    const searchQuery = mapSearchDtoToFindOperators(search);
+    return this.equipmentRepositoryService.findMany(searchQuery);
   }
 
   async deleteOne(id: number): Promise<{ status: string; affected?: number }> {

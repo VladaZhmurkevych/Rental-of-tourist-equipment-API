@@ -8,71 +8,71 @@ import {
   LessThanOrEqual,
 } from 'typeorm';
 
+export interface SearchQuery {
+  categoryId?: FindOperator<number[]>;
+  name?: FindOperator<string>;
+  rentPricePerHour?: FindOperator<number>;
+  rentPricePerDay?: FindOperator<number>;
+  originalPrice?: FindOperator<number>;
+}
+
 export class SearchQueryBuilder {
-  private categoryId: FindOperator<number[]>;
-  private name: FindOperator<string>;
-  private rentPricePerHour: FindOperator<number>;
-  private rentPricePerDay: FindOperator<number>;
-  private originalPrice: FindOperator<number>;
+  private searchQuery: SearchQuery = {};
 
   addCategoryId(ids: number[]) {
-    this.categoryId = In(ids);
+    this.searchQuery.categoryId = In(Array.isArray(ids) ? ids : [ids]);
+    return this;
   }
 
   addName(name: string) {
-    this.name = Like(name);
+    this.searchQuery.name = Like(name);
+    return this;
   }
 
-  private setRange(field: FindOperator<number>, from: number, to: number) {
+  private setRange(field: string, from: number, to: number) {
     if (from && to) {
-      field = Between(from, to);
+      this.searchQuery[field] = Between(from, to);
     } else if (from) {
-      field = MoreThanOrEqual(from);
-    } else {
-      field = LessThanOrEqual(from);
+      this.searchQuery[field] = MoreThanOrEqual(from);
+    } else if (to) {
+      this.searchQuery[field] = LessThanOrEqual(from);
     }
   }
 
   addPricePerHour(from: number, to: number) {
-    this.setRange(this.rentPricePerHour, from, to);
+    this.setRange('rentPricePerHour', from, to);
+    return this;
   }
 
   addPricePerDay(from: number, to: number) {
-    this.setRange(this.rentPricePerDay, from, to);
+    this.setRange('rentPricePerDay', from, to);
+    return this;
   }
 
   addOriginalPrice(from: number, to: number) {
-    this.setRange(this.originalPrice, from, to);
+    this.setRange('originalPrice', from, to);
+    return this;
   }
 
   getSearchQuery() {
-    return {
-      categoryId: this.categoryId,
-      name: this.name,
-      description: this.description,
-      rentPricePerHour: this.rentPricePerHour,
-      rentPricePerDay: this.rentPricePerDay,
-      originalPrice: this.originalPrice,
-    };
+    return this.searchQuery;
   }
 }
 
 export const mapSearchDtoToFindOperators = (search: SearchDto) => {
   const searchQueryBuilder = new SearchQueryBuilder();
+
+  searchQueryBuilder
+    .addOriginalPrice(search.originalPriceFrom, search.originalPriceTo)
+    .addPricePerDay(search.rentPricePerDayFrom, search.rentPricePerDayTo)
+    .addPricePerHour(search.rentPricePerHourFrom, search.rentPricePerHourTo);
+
   if (search.categoryId) {
     searchQueryBuilder.addCategoryId(search.categoryId);
   }
   if (search.name) {
     searchQueryBuilder.addName(search.name);
   }
-  if (search.rentPerHourPrice) {
-    searchQueryBuilder.addPricePerHour(search.rentPerHourDay.from, search.rentPerHourDay.to);
-  }
-  if (search.rentPerHourDay) {
-    searchQueryBuilder.addPricePerDay(search.rentPerHourDay.from, search.rentPerHourDay.to);
-  }
-  if (search.originalPrice) {
-    searchQueryBuilder.addOriginalPrice(search.rentPerHourDay.from, search.rentPerHourDay.to);
-  }
-  return searchQueryBuilder.getSearchQuery()
+
+  return searchQueryBuilder.getSearchQuery();
 };

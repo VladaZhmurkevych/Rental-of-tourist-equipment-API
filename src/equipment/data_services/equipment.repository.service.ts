@@ -3,7 +3,6 @@ import { DeleteResult, Repository, UpdateResult, LessThan } from 'typeorm';
 import { EquipmentBuilder } from './equipment.builder';
 import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
-import { EntityUpdateInterface } from './entity.update.interface';
 import { EquipmentUpdateDto } from '../dto/equipment_update.dto';
 
 @Injectable()
@@ -17,12 +16,12 @@ export class EquipmentRepositoryService {
     return this.equipmentRepository.findOne(id);
   }
 
-  findAll(searchQuery): Promise<Equipment[]> {
-    return this.equipmentRepository.find(searchQuery);
+  findAll(): Promise<Equipment[]> {
+    return this.equipmentRepository.find();
   }
 
-  findMany(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+  findMany(searchQuery): Promise<Equipment[]> {
+    return this.equipmentRepository.find(searchQuery);
   }
 
   deleteById(id: number): Promise<DeleteResult> {

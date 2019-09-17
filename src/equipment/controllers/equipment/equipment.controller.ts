@@ -8,12 +8,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CategoryService } from '../../services/category/category.service';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { EquipmentDto } from '../../dto/equipment.dto';
 import { SingleItemParamsDto } from '../../dto/single_item_params.dto';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
+import {SearchDto} from '../../dto/search.dto';
 
 @Controller('equipment')
 export class EquipmentController {
@@ -47,9 +49,9 @@ export class EquipmentController {
   }
 
   @Get()
-  async getAllItems() {
+  async searchItems(@Query() searchQuery: SearchDto) {
     try {
-      return await this.equipmentService.getAll();
+      return await this.equipmentService.search(searchQuery);
     } catch (e) {
       throw new HttpException(
         'Internal Server Error',

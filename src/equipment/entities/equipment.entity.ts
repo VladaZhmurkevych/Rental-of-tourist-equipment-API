@@ -6,7 +6,7 @@ export class Equipment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(type => Category)
+  @OneToOne(type => Category, { nullable: false })
   @JoinColumn()
   category: Category;
 
