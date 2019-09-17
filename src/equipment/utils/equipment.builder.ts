@@ -18,7 +18,7 @@ export class EquipmentBuilder {
   }
 
   addCategory(categoryId: number): EquipmentBuilder {
-    this.equipment.categoryId = categoryId;
+    this.equipment.category = categoryId;
     return this;
   }
 
