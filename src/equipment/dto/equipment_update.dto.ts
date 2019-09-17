@@ -1,11 +1,11 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
 import {ApiModelPropertyOptional} from '@nestjs/swagger';
 
 export class EquipmentUpdateDto {
   @ApiModelPropertyOptional()
   @IsOptional()
-  @IsNumber()
-  readonly categoryId: number;
+  @IsNumberString()
+  readonly categoryId: string;
 
   @ApiModelPropertyOptional()
   @IsOptional()
@@ -19,17 +19,17 @@ export class EquipmentUpdateDto {
 
   @ApiModelPropertyOptional()
   @IsOptional()
-  @IsNumber()
+  @IsNumberString()
   readonly rentPricePerHour?: number;
 
   @ApiModelPropertyOptional()
   @IsOptional()
-  @IsNumber()
+  @IsNumberString()
   readonly rentPricePerDay?: number;
 
   @ApiModelPropertyOptional()
   @IsOptional()
-  @IsNumber()
+  @IsNumberString()
   readonly originalPrice: number;
 
   @ApiModelPropertyOptional()

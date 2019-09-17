@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from 'typeorm';
+import { Equipment } from './equipment.entity';
 
 @Entity()
 export class Category {
@@ -7,4 +13,7 @@ export class Category {
 
   @Column({ length: 500 })
   name: string;
+
+  @OneToMany(type => Equipment, equipment => equipment.category)
+  equipment: Equipment[];
 }

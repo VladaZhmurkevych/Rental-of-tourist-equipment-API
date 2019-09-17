@@ -15,7 +15,7 @@ import { EquipmentService } from '../../services/equipment/equipment.service';
 import { EquipmentDto } from '../../dto/equipment.dto';
 import { SingleItemParamsDto } from '../../dto/single_item_params.dto';
 import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
-import {SearchDto} from '../../dto/search.dto';
+import { SearchDto } from '../../dto/search.dto';
 
 @Controller('equipment')
 export class EquipmentController {
@@ -29,10 +29,14 @@ export class EquipmentController {
     try {
       return await this.categoryService.findAll();
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -41,10 +45,14 @@ export class EquipmentController {
     try {
       return await this.equipmentService.getOneById(params.id);
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -53,10 +61,14 @@ export class EquipmentController {
     try {
       return await this.equipmentService.search(searchQuery);
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -65,10 +77,14 @@ export class EquipmentController {
     try {
       return await this.equipmentService.addEquipment(equipmentDto);
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -77,17 +93,27 @@ export class EquipmentController {
     try {
       return await this.equipmentService.deleteOne(params.id);
     } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (e instanceof HttpException) {
+        throw e;
+      } else {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
   @Put(':id')
-  async updateItem( @Param() params: SingleItemParamsDto, @Body() equipmentUpdateDto: EquipmentUpdateDto) {
+  async updateItem(
+    @Param() params: SingleItemParamsDto,
+    @Body() equipmentUpdateDto: EquipmentUpdateDto,
+  ) {
     try {
-      return await this.equipmentService.updateOne(equipmentUpdateDto, params.id);
+      return await this.equipmentService.updateOne(
+        equipmentUpdateDto,
+        params.id,
+      );
     } catch (e) {
       throw new HttpException(
         'Internal Server Error',

@@ -6,6 +6,7 @@ import { DatabaseModule } from '../database/database.module';
 import { CategoryService } from './services/category/category.service';
 import { equipmentsProvider } from './providers/equipment.provider';
 import { EquipmentRepositoryService } from './data_services/equipment.repository.service';
+import { CategoryRepositoryService } from './data_services/category.repository.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -14,6 +15,7 @@ import { EquipmentRepositoryService } from './data_services/equipment.repository
     categoriesProvider,
     equipmentsProvider,
     EquipmentRepositoryService,
+    CategoryRepositoryService,
     CategoryService,
     EquipmentService,
   ],

@@ -4,6 +4,7 @@ import { EquipmentBuilder } from '../utils/equipment.builder';
 import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
 import { EquipmentUpdateDto } from '../dto/equipment_update.dto';
+import { Category } from '../entities/category.entity';
 
 @Injectable()
 export class EquipmentRepositoryService {
@@ -13,15 +14,18 @@ export class EquipmentRepositoryService {
   ) {}
 
   findById(id: number): Promise<Equipment> {
-    return this.equipmentRepository.findOne(id);
+    return this.equipmentRepository.findOne(id, { relations: ['category'] });
   }
 
   findAll(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+    return this.equipmentRepository.find({ relations: ['category'] });
   }
 
   findMany(searchQuery): Promise<Equipment[]> {
-    return this.equipmentRepository.find(searchQuery);
+    return this.equipmentRepository.find({
+      ...searchQuery,
+      relations: ['category'],
+    });
   }
 
   deleteById(id: number): Promise<DeleteResult> {
@@ -34,13 +38,13 @@ export class EquipmentRepositoryService {
 
   async createOne(
     equipmentDto: EquipmentDto,
-    categoryId: number,
+    category: Category,
   ): Promise<Equipment> {
     const equipmentBuilder = new EquipmentBuilder();
 
     equipmentBuilder
       .addName(equipmentDto.name)
-      .addCategory(categoryId)
+      .addCategory(category)
       .addRentOriginalPrice(equipmentDto.originalPrice)
       .addDescription(equipmentDto.description);
 

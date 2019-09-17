@@ -7,11 +7,12 @@ import { EquipmentUpdateDto } from '../../dto/equipment_update.dto';
 import { ObjectLiteral } from 'typeorm';
 import { SearchDto } from '../../dto/search.dto';
 import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
+import { CategoryError } from '../../utils/category.error';
 
 @Injectable()
 export class EquipmentService {
   constructor(
-    private readonly equipmentRepositoryService: EquipmentRepositoryService,
+    private equipmentRepositoryService: EquipmentRepositoryService,
     private categoryService: CategoryService,
   ) {}
 
@@ -39,9 +40,10 @@ export class EquipmentService {
   }
 
   async addEquipment(equipmentDto: EquipmentDto): Promise<Equipment> {
-    const categoryId = await this.categoryService.getCategoryIdByName(
+    const category = await this.categoryService.getCategoryByName(
       equipmentDto.categoryName,
     );
-    return this.equipmentRepositoryService.createOne(equipmentDto, categoryId);
+    if (!category) { throw new CategoryError(); }
+    return this.equipmentRepositoryService.createOne(equipmentDto, category);
   }
 }

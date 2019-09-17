@@ -1,7 +1,8 @@
 import { Equipment } from '../entities/equipment.entity';
+import { Category } from '../entities/category.entity';
 
 export class EquipmentBuilder {
-  private readonly equipment = null;
+  private readonly equipment: Equipment = null;
 
   constructor() {
     this.equipment = new Equipment();
@@ -17,8 +18,8 @@ export class EquipmentBuilder {
     return this;
   }
 
-  addCategory(categoryId: number): EquipmentBuilder {
-    this.equipment.category = categoryId;
+  addCategory(category: Category): EquipmentBuilder {
+    this.equipment.category = category;
     return this;
   }
 

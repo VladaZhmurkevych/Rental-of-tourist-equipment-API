@@ -3,7 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
 } from 'typeorm';
 import { Category } from './category.entity';
 
@@ -12,7 +12,9 @@ export class Equipment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(type => Category, { nullable: false })
+  @ManyToOne(type => Category, category => category.equipment, {
+    nullable: false,
+  })
   @JoinColumn()
   category: Category;
 
