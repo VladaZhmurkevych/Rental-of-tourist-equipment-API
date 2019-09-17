@@ -21,6 +21,11 @@ export class EquipmentService {
     return this.equipmentRepositoryService.findAll();
   }
 
+  search(): Promise<Equipment[]> {
+    return this.equipmentRepositoryService.findAll();
+  }
+
+
   getMany(): Promise<Equipment[]> {
     return this.equipmentRepositoryService.findMany();
   }

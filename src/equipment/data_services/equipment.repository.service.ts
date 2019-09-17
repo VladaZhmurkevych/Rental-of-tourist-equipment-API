@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult, LessThan } from 'typeorm';
 import { EquipmentBuilder } from './equipment.builder';
 import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
@@ -17,8 +17,8 @@ export class EquipmentRepositoryService {
     return this.equipmentRepository.findOne(id);
   }
 
-  findAll(): Promise<Equipment[]> {
-    return this.equipmentRepository.find();
+  findAll(searchQuery): Promise<Equipment[]> {
+    return this.equipmentRepository.find(searchQuery);
   }
 
   findMany(): Promise<Equipment[]> {
