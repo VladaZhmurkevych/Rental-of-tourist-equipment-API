@@ -1,6 +1,11 @@
-import { IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
-import {ApiModelPropertyOptional} from '@nestjs/swagger';
-import { Category } from "../entities/category.entity";
+import {
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { ApiModelPropertyOptional } from '@nestjs/swagger';
+import { Category } from '../entities/category.entity';
 
 export class EquipmentUpdateDto {
   @ApiModelPropertyOptional()
