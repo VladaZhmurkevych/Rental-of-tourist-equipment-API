@@ -23,7 +23,9 @@ export class EquipmentRepositoryService {
 
   findMany(searchQuery): Promise<Equipment[]> {
     return this.equipmentRepository.find({
-      ...searchQuery,
+      where: {
+        ...searchQuery,
+      },
       relations: ['category'],
     });
   }

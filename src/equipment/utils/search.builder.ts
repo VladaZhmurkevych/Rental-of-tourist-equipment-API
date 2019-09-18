@@ -2,7 +2,8 @@ import { SearchQuery } from '../interfaces/search.query.interface';
 import { Between, In, LessThanOrEqual, Like, MoreThanOrEqual } from 'typeorm';
 
 export class SearchQueryBuilder {
-  private searchQuery: SearchQuery = {};
+  private searchQuery: SearchQuery = {
+  };
 
   addCategoryId(ids: number[]) {
     this.searchQuery.categoryId = In(Array.isArray(ids) ? ids : [ids]);

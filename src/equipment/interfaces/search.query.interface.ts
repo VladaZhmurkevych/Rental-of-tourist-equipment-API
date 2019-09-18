@@ -1,6 +1,6 @@
-import {FindOperator} from 'typeorm';
+import { FindManyOptions, FindOperator } from 'typeorm';
 
-export interface SearchQuery {
+export interface SearchQuery extends FindManyOptions {
   categoryId?: FindOperator<number[]>;
   name?: FindOperator<string>;
   rentPricePerHour?: FindOperator<number>;
