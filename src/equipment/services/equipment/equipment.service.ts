@@ -8,6 +8,7 @@ import { ObjectLiteral, QueryFailedError } from 'typeorm';
 import { SearchDto } from '../../dto/search.dto';
 import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
 import { CategoryError } from '../../utils/category.error';
+import { Observer, Subject } from '../../utils/observer';
 
 @Injectable()
 export class EquipmentService {
@@ -21,8 +22,16 @@ export class EquipmentService {
   }
 
   search(search: SearchDto): Promise<Equipment[]> {
-    const searchQuery = mapSearchDtoToFindOperators(search);
-    return this.equipmentRepositoryService.findMany(searchQuery);
+    return new Promise<Equipment[]>((resolve, reject) => {
+      const subject = new Subject<Equipment[]>();
+      const observer = new Observer<Equipment[]>(resolve);
+      subject.subscribe(observer);
+      const searchQuery = mapSearchDtoToFindOperators(search);
+      this.equipmentRepositoryService.findMany(searchQuery).then(data => {
+        subject.nextValue(data);
+        subject.unsubscribe(observer);
+      });
+    });
   }
 
   async deleteOne(id: number): Promise<{ status: string; affected?: number }> {
