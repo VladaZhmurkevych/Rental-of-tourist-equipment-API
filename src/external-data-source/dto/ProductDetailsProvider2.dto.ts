@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-export class EquipmentDto {
+
+export class ProductDetailsProvider2Dto {
   @IsNotEmpty()
-  @IsString()
-  readonly categoryName: string;
+  id: number;
 
   @IsNotEmpty()
   @IsString()
@@ -24,4 +24,5 @@ export class EquipmentDto {
 
   @IsString()
   readonly mainPhoto?: string;
+
 }

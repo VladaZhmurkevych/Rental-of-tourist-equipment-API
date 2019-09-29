@@ -13,7 +13,7 @@ export class EquipmentRepositoryService {
     private readonly equipmentRepository: Repository<Equipment>,
   ) {}
 
-  findById(id: number): Promise<Equipment> {
+  findById(id: string): Promise<Equipment> {
     return this.equipmentRepository.findOne(id, { relations: ['category'] });
   }
 
@@ -30,11 +30,11 @@ export class EquipmentRepositoryService {
     });
   }
 
-  deleteById(id: number): Promise<DeleteResult> {
+  deleteById(id: string): Promise<DeleteResult> {
     return this.equipmentRepository.delete(id);
   }
 
-  updateOne(id: number, updateData: EquipmentUpdateDto): Promise<UpdateResult> {
+  updateOne(id: string, updateData: EquipmentUpdateDto): Promise<UpdateResult> {
     return this.equipmentRepository.update(id, updateData);
   }
 

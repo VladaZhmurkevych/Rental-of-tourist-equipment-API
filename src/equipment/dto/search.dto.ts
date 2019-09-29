@@ -1,9 +1,13 @@
-import { IsNumberString, IsOptional, IsString } from 'class-validator';
+import { IsNumberString, IsOptional, IsString, Matches } from 'class-validator';
 
 export class SearchDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  @Matches(/^[0-9]*(_[0-9]*)?$/)
+  id?: string;
 
   @IsOptional()
   @IsNumberString()

@@ -7,9 +7,10 @@ import { CategoryService } from './services/category/category.service';
 import { equipmentsProvider } from './providers/equipment.provider';
 import { EquipmentRepositoryService } from './data_services/equipment.repository.service';
 import { CategoryRepositoryService } from './data_services/category.repository.service';
+import { ExternalDataSourceModule } from '../external-data-source/external-data-source.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ExternalDataSourceModule],
   controllers: [EquipmentController],
   providers: [
     categoriesProvider,

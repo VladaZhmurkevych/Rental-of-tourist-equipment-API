@@ -24,13 +24,13 @@ export class Equipment {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'money', nullable: true })
+  @Column({ type: 'float', nullable: true })
   rentPricePerHour: number;
 
-  @Column({ type: 'money', nullable: true })
+  @Column({ type: 'float', nullable: true })
   rentPricePerDay: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'float' })
   originalPrice: number;
 
   @Column({ type: 'varchar', nullable: true })

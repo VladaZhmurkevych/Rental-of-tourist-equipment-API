@@ -1,16 +1,13 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-export class EquipmentDto {
+import { IEquipment } from '../../equipment/utils/equipment.interface';
+
+export class PriceListProvider2Dto implements IEquipment {
   @IsNotEmpty()
-  @IsString()
-  readonly categoryName: string;
+  id: number;
 
   @IsNotEmpty()
   @IsString()
   readonly name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly description: string;
 
   @IsNumber()
   readonly rentPricePerHour?: number;
@@ -21,7 +18,4 @@ export class EquipmentDto {
   @IsNotEmpty()
   @IsNumber()
   readonly originalPrice: number;
-
-  @IsString()
-  readonly mainPhoto?: string;
 }

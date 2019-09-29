@@ -8,31 +8,36 @@ import { ObjectLiteral, QueryFailedError } from 'typeorm';
 import { SearchDto } from '../../dto/search.dto';
 import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
 import { CategoryError } from '../../utils/category.error';
+import { ExternalDataSourceService } from '../../../external-data-source/services/external-data-source/external-data-source.service';
 
 @Injectable()
 export class EquipmentService {
   constructor(
     private equipmentRepositoryService: EquipmentRepositoryService,
     private categoryService: CategoryService,
+    private externalDataSourceService: ExternalDataSourceService,
   ) {}
 
-  getOneById(id: number): Promise<Equipment> {
+  getOneById(id: string): Promise<Equipment> {
     return this.equipmentRepositoryService.findById(id);
   }
 
   search(search: SearchDto): Promise<Equipment[]> {
     const searchQuery = mapSearchDtoToFindOperators(search);
-    return this.equipmentRepositoryService.findMany(searchQuery);
+    return Promise.all([
+      this.equipmentRepositoryService.findMany(searchQuery),
+      this.externalDataSourceService.getPriceList(search),
+    ]).then((response) => [].concat(...response));
   }
 
-  async deleteOne(id: number): Promise<{ status: string; affected?: number }> {
+  async deleteOne(id: string): Promise<{ status: string; affected?: number }> {
     const deleteResult = await this.equipmentRepositoryService.deleteById(id);
     return { status: 'success', affected: deleteResult.affected };
   }
 
   async updateOne(
     updateData: EquipmentUpdateDto,
-    id: number,
+    id: string,
   ): Promise<{ status: string; entity: ObjectLiteral }> {
     try {
       await this.equipmentRepositoryService.updateOne(id, updateData);

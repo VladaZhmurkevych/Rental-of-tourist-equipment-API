@@ -1,6 +1,6 @@
-import { IsNumberString } from 'class-validator';
+import { IsNumberString, Matches } from 'class-validator';
 
 export class SingleItemParamsDto {
-  @IsNumberString()
-  readonly id: number;
+  @Matches(/^[0-9]*(_[0-9]*)?$/)
+  readonly id: string;
 }
