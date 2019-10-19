@@ -32,7 +32,7 @@ class AndSpecification<T> extends AbstractSpecification<T> {
     this.other = other;
   }
 
-  isSatisfiedBy(entity: T): boolean {
+  isSatisfiedBy = (entity: T): boolean => {
     return this.one.isSatisfiedBy(entity) && this.other.isSatisfiedBy(entity);
   }
 }
@@ -90,8 +90,8 @@ export class IdSpecification extends AbstractSpecification<IEquipment> {
     this.id = id;
   }
 
-  isSatisfiedBy(entity: IEquipment): boolean {
-    return entity.id === this.id;
+  public isSatisfiedBy(entity: IEquipment): boolean {
+    return entity.id.toString() === this.id.toString();
   }
 }
 
@@ -104,10 +104,12 @@ export class PriceMinSpecification extends AbstractSpecification<
   constructor(price: number, field: string) {
     super();
     this.price = price;
+    this.field = field;
   }
 
   isSatisfiedBy(entity: IEquipment): boolean {
-    return entity[this.field] <= this.price;
+    console.log(entity[this.field], this.price,entity[this.field] >= this.price)
+    return entity[this.field] >= this.price;
   }
 }
 
@@ -120,6 +122,7 @@ export class PriceMaxSpecification extends AbstractSpecification<
   constructor(price: number, field: string) {
     super();
     this.price = price;
+    this.field = field;
   }
 
   isSatisfiedBy(entity: IEquipment): boolean {

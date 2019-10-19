@@ -58,7 +58,7 @@ export class Provider2Service extends AbstractDataProvider {
       take(1),
       map((response): ProductDetailsProvider2Dto => response.data),
       map((data: ProductDetailsProvider2Dto) =>
-        this.mapResponseToEquipmentDetailsDto(data),
+        data ? this.mapResponseToEquipmentDetailsDto(data) : null,
       ),
     );
   }

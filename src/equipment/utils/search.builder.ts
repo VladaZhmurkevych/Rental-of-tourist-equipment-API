@@ -11,7 +11,7 @@ export class SearchQueryBuilder {
   }
 
   addName(name: string) {
-    this.searchQuery.name = Like(name);
+    this.searchQuery.name = Like(`%${name}%`);
     return this;
   }
 

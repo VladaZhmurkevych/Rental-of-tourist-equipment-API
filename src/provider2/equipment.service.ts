@@ -25,10 +25,16 @@ export class EquipmentService {
   ];
 
   getPriceList(): IEquipment[] {
-    return this.equipment;
+    return this.equipment.map((item) => ({
+      id: item.id,
+      name: item.name,
+      rentPricePerDay: item.rentPricePerDay,
+      rentPricePerHour: item.rentPricePerHour,
+      originalPrice: item.originalPrice
+    }));
   }
 
   getDetails(id: string): IEquipment {
-    return this.equipment.find((equipment) => equipment.id === id);
+    return this.equipment.find((equipment) => equipment.id.toString() === id.toString());
   }
 }

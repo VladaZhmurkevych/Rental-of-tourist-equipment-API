@@ -19,7 +19,7 @@ export class Provider1Service extends AbstractDataProvider {
 
   search(query: SearchDto): Observable<EquipmentPriceListDto[]> {
     return this.httpService
-      .get<EquipmentProvider1Dto[]>(this.searchEndpoint)
+      .get<EquipmentProvider1Dto[]>(this.searchEndpoint, { params: query })
       .pipe(
         map((response): EquipmentProvider1Dto[] => response.data),
         map((data: EquipmentProvider1Dto[]) =>
@@ -44,7 +44,7 @@ export class Provider1Service extends AbstractDataProvider {
       map((data: EquipmentProvider1Dto[]): EquipmentProvider1Dto => data[0]),
       map(
         (data: EquipmentProvider1Dto): EquipmentDetailsDto =>
-          this.mapResponseToEquipmentDetailsDto(data),
+          data ? this.mapResponseToEquipmentDetailsDto(data) : null,
       ),
     );
   }

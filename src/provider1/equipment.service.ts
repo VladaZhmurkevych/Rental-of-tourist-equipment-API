@@ -29,6 +29,6 @@ export class EquipmentService {
 
   getFilteredItems(search: SearchDto) {
     const specification = mapSearchDtoToFindSpecification(search);
-    return this.equipment.filter(specification.isSatisfiedBy);
+    return this.equipment.filter((item) => specification.isSatisfiedBy(item));
   }
 }

@@ -40,32 +40,32 @@ export const mapSearchDtoToFindSpecification = (
   }
   if (search.originalPriceTo) {
     specification = specification.and(
-      new PriceMaxSpecification(search.originalPriceTo, 'originalPriceTo'),
+      new PriceMaxSpecification(search.originalPriceTo, 'originalPrice'),
     );
   }
   if (search.originalPriceFrom) {
     specification = specification.and(
-      new PriceMinSpecification(search.originalPriceFrom, 'originalPriceFrom'),
+      new PriceMinSpecification(search.originalPriceFrom, 'originalPrice'),
     );
   }
   if (search.rentPricePerDayFrom) {
     specification = specification.and(
       new PriceMinSpecification(
         search.rentPricePerDayFrom,
-        'rentPricePerDayFrom',
+        'rentPricePerDay',
       ),
     );
   }
   if (search.rentPricePerDayTo) {
     specification = specification.and(
-      new PriceMaxSpecification(search.rentPricePerDayTo, 'rentPricePerDayTo'),
+      new PriceMaxSpecification(search.rentPricePerDayTo, 'rentPricePerDay'),
     );
   }
   if (search.rentPricePerHourFrom) {
     specification = specification.and(
       new PriceMinSpecification(
         search.rentPricePerHourFrom,
-        'rentPricePerHourFrom',
+        'rentPricePerHour',
       ),
     );
   }
@@ -73,7 +73,7 @@ export const mapSearchDtoToFindSpecification = (
     specification = specification.and(
       new PriceMaxSpecification(
         search.rentPricePerHourTo,
-        'rentPricePerHourTo',
+        'rentPricePerHour',
       ),
     );
   }

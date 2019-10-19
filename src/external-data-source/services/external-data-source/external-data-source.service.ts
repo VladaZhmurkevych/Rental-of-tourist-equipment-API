@@ -13,13 +13,16 @@ export class ExternalDataSourceService {
   private sourceNumberRegExp: RegExp = /[0-9]*_/;
   private dataProviders: DataProviderInterface[];
 
-  constructor(provider1: Provider1Service, provider2: Provider2Service) {
+  constructor(
+    private provider1: Provider1Service,
+    private provider2: Provider2Service
+  ) {
     this.dataProviders = [provider1, provider2];
   }
 
   getPriceList(query: SearchDto): Promise<EquipmentPriceListDto[]> {
     const response$ = zip(
-        ...this.dataProviders.map(dataProvider => dataProvider.search(query)),
+      ...this.dataProviders.map(dataProvider => dataProvider.search(query)),
     );
     return response$
       .pipe(
@@ -28,15 +31,15 @@ export class ExternalDataSourceService {
       .toPromise();
   }
 
-  getDetails(sourceId: string, id: number): Promise<EquipmentDetailsDto> {
-    const source = this.getSourceNumberFromSourceId(sourceId);
+  getDetails(sourceId: string): Promise<EquipmentDetailsDto> {
+    const [source, id] = this.getSourceNumberAndItemIdFromSourceId(sourceId);
     if (!source) { return null; }
-    return this.dataProviders[source].getDetails(id).toPromise();
+    return this.dataProviders[source - 1].getDetails(id).toPromise();
   }
 
-  private getSourceNumberFromSourceId(sourceId: string): number {
+  private getSourceNumberAndItemIdFromSourceId(sourceId: string): number[] {
     const matchedCase = sourceId.match(this.sourceNumberRegExp);
     if (!matchedCase) { return null; }
-    return parseInt(matchedCase[0].slice(0, -1), 10);
+    return sourceId.split('_').map((_) => parseInt(_, 10));
   }
 }

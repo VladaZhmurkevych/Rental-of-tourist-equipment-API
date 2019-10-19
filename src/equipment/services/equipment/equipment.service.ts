@@ -9,6 +9,7 @@ import { SearchDto } from '../../dto/search.dto';
 import { mapSearchDtoToFindOperators } from '../../utils/equipment.helpers';
 import { CategoryError } from '../../utils/category.error';
 import { ExternalDataSourceService } from '../../../external-data-source/services/external-data-source/external-data-source.service';
+import { IEquipment } from '../../utils/equipment.interface';
 
 @Injectable()
 export class EquipmentService {
@@ -18,8 +19,11 @@ export class EquipmentService {
     private externalDataSourceService: ExternalDataSourceService,
   ) {}
 
-  getOneById(id: string): Promise<Equipment> {
-    return this.equipmentRepositoryService.findById(id);
+  getOneById(id: string): Promise<IEquipment> {
+    const isFromExternalSource = id.includes('_')
+    return isFromExternalSource
+      ? this.externalDataSourceService.getDetails(id)
+      : this.equipmentRepositoryService.findById(id);
   }
 
   search(search: SearchDto): Promise<Equipment[]> {
