@@ -2,21 +2,12 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  JoinColumn,
-  ManyToOne,
 } from 'typeorm';
-import { Category } from './category.entity';
 
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne(type => Category, category => category.equipment, {
-    nullable: true,
-  })
-  @JoinColumn()
-  category: Category;
 
   @Column({ length: 255 })
   name: string;

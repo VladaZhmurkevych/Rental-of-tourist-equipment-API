@@ -17,7 +17,7 @@ export class Provider2Service extends AbstractDataProvider {
   private priceListEndpoint: string = PROVIDER_2_PRICE_LIST_URL;
   private productDetailsEndpoint: string = PROVIDER_2_DETAILS_URL;
   constructor(private httpService: HttpService) {
-    super(2);
+    super(2, 9);
   }
 
   search(query: SearchDto): Observable<EquipmentPriceListDto[]> {

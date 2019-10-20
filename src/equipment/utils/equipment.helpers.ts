@@ -1,14 +1,16 @@
 import { SearchDto } from '../dto/search.dto';
 import { SearchQueryBuilder } from './search.builder';
 import {
-  EmptySpecification, IdSpecification,
+  EmptySpecification,
+  IdSpecification,
   NameSpecification,
   PriceMaxSpecification,
   PriceMinSpecification,
-  Specification
+  Specification,
 } from './specification';
 import { Equipment } from '../entities/equipment.entity';
 import { IEquipment } from './equipment.interface';
+import { DAY } from './constants';
 
 export const mapSearchDtoToFindOperators = (search: SearchDto) => {
   const searchQueryBuilder = new SearchQueryBuilder();
@@ -50,10 +52,7 @@ export const mapSearchDtoToFindSpecification = (
   }
   if (search.rentPricePerDayFrom) {
     specification = specification.and(
-      new PriceMinSpecification(
-        search.rentPricePerDayFrom,
-        'rentPricePerDay',
-      ),
+      new PriceMinSpecification(search.rentPricePerDayFrom, 'rentPricePerDay'),
     );
   }
   if (search.rentPricePerDayTo) {
@@ -71,11 +70,18 @@ export const mapSearchDtoToFindSpecification = (
   }
   if (search.rentPricePerHourTo) {
     specification = specification.and(
-      new PriceMaxSpecification(
-        search.rentPricePerHourTo,
-        'rentPricePerHour',
-      ),
+      new PriceMaxSpecification(search.rentPricePerHourTo, 'rentPricePerHour'),
     );
   }
   return specification;
+};
+
+export const calculateCacheTtl = (updateHour: number) => {
+  const updateTime = updateHour * 60 * 60 * 1000;
+  const now = new Date();
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const sec = now.getSeconds();
+  const timeInMs = (hour * 60 * 60 + min * 60 + sec) * 1000;
+  return Date.now() + (timeInMs > updateTime ? DAY - timeInMs + updateTime : updateTime - timeInMs);
 };

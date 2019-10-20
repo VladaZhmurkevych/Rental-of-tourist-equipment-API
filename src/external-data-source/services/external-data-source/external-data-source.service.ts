@@ -7,6 +7,7 @@ import { SearchDto } from '../../../equipment/dto/search.dto';
 import { EquipmentPriceListDto } from '../../dto/EquipmentPriceList.dto';
 import { map } from 'rxjs/operators';
 import { EquipmentDetailsDto } from '../../dto/EquipmentDetails.dto';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class ExternalDataSourceService {
@@ -15,14 +16,15 @@ export class ExternalDataSourceService {
 
   constructor(
     private provider1: Provider1Service,
-    private provider2: Provider2Service
+    private provider2: Provider2Service,
+    private databaseService: DatabaseService,
   ) {
-    this.dataProviders = [provider1, provider2];
+    this.dataProviders = [databaseService, provider1, provider2];
   }
 
   getPriceList(query: SearchDto): Promise<EquipmentPriceListDto[]> {
     const response$ = zip(
-      ...this.dataProviders.map(dataProvider => dataProvider.search(query)),
+      ...this.dataProviders.map(dataProvider => dataProvider.checkCacheAndSearch(query)),
     );
     return response$
       .pipe(
@@ -34,7 +36,7 @@ export class ExternalDataSourceService {
   getDetails(sourceId: string): Promise<EquipmentDetailsDto> {
     const [source, id] = this.getSourceNumberAndItemIdFromSourceId(sourceId);
     if (!source) { return null; }
-    return this.dataProviders[source - 1].getDetails(id).toPromise();
+    return this.dataProviders[source ].getDetails(id).toPromise();
   }
 
   private getSourceNumberAndItemIdFromSourceId(sourceId: string): number[] {

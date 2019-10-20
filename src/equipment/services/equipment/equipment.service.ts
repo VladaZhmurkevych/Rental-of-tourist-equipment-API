@@ -20,18 +20,14 @@ export class EquipmentService {
   ) {}
 
   getOneById(id: string): Promise<IEquipment> {
-    const isFromExternalSource = id.includes('_')
+    const isFromExternalSource = id.includes('_');
     return isFromExternalSource
       ? this.externalDataSourceService.getDetails(id)
       : this.equipmentRepositoryService.findById(id);
   }
 
   search(search: SearchDto): Promise<Equipment[]> {
-    const searchQuery = mapSearchDtoToFindOperators(search);
-    return Promise.all([
-      this.equipmentRepositoryService.findMany(searchQuery),
-      this.externalDataSourceService.getPriceList(search),
-    ]).then((response) => [].concat(...response));
+    return this.externalDataSourceService.getPriceList(search).then((response) => [].concat(...response));
   }
 
   async deleteOne(id: string): Promise<{ status: string; affected?: number }> {

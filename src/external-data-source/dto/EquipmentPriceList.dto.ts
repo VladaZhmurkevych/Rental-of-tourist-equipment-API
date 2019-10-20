@@ -3,7 +3,7 @@ import { IEquipment } from '../../equipment/utils/equipment.interface';
 
 export class EquipmentPriceListDto implements IEquipment {
   @IsNotEmpty()
-  id: string;
+  id: string | number;
 
   @IsNotEmpty()
   @IsString()

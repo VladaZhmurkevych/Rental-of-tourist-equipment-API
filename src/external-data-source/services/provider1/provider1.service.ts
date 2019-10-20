@@ -14,7 +14,7 @@ import { PROVIDER_1_SEARCH_URL } from '../../../equipment/utils/endpoints';
 export class Provider1Service extends AbstractDataProvider {
   private searchEndpoint: string = PROVIDER_1_SEARCH_URL;
   constructor(private httpService: HttpService) {
-    super(1);
+    super(1, 9);
   }
 
   search(query: SearchDto): Observable<EquipmentPriceListDto[]> {

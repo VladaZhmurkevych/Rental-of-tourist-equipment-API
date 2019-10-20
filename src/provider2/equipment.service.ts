@@ -1,40 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { IEquipment } from '../equipment/utils/equipment.interface';
+import { Equipment } from './equipment.entity';
+import { Connection, EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class EquipmentService {
-  private equipment: IEquipment[] = [
-    {
-      id: 1,
-      name: 'Name 1 from provider 2',
-      description: 'Description',
-      rentPricePerDay: 10,
-      rentPricePerHour: 1,
-      mainPhoto: '',
-      originalPrice: 230,
-    },
-    {
-      id: 2,
-      name: 'Name 2 from provider 2',
-      description: 'Description 2',
-      rentPricePerDay: 17,
-      rentPricePerHour: 6,
-      mainPhoto: '',
-      originalPrice: 240,
-    },
-  ];
-
-  getPriceList(): IEquipment[] {
-    return this.equipment.map((item) => ({
-      id: item.id,
-      name: item.name,
-      rentPricePerDay: item.rentPricePerDay,
-      rentPricePerHour: item.rentPricePerHour,
-      originalPrice: item.originalPrice
-    }));
+  private readonly equipmentRepository: Repository<Equipment>;
+  constructor(private readonly entityManager: Connection) {
+    this.equipmentRepository = entityManager.getRepository(Equipment);
   }
 
-  getDetails(id: string): IEquipment {
-    return this.equipment.find((equipment) => equipment.id.toString() === id.toString());
+  async getPriceList(): Promise<IEquipment[]> {
+    await new Promise(resolve => {
+      setTimeout(resolve, 5000);
+    });
+    return this.equipmentRepository.find({
+      select: [
+        'id',
+        'name',
+        'rentPricePerDay',
+        'rentPricePerHour',
+        'originalPrice',
+      ],
+    });
+  }
+
+  getDetails(id: string): Promise<IEquipment> {
+    return this.equipmentRepository.findOne(id);
   }
 }

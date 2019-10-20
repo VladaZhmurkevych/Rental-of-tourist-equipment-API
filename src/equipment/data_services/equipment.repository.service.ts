@@ -5,15 +5,17 @@ import { EquipmentDto } from '../dto/equipment.dto';
 import { Equipment } from '../entities/equipment.entity';
 import { EquipmentUpdateDto } from '../dto/equipment_update.dto';
 import { Category } from '../entities/category.entity';
+import { EquipmentCacheService } from '../services/cache/cache.service';
 
 @Injectable()
 export class EquipmentRepositoryService {
   constructor(
     @Inject('EQUIPMENTS_REPOSITORY')
     private readonly equipmentRepository: Repository<Equipment>,
+    private readonly cacheService: EquipmentCacheService,
   ) {}
 
-  findById(id: string): Promise<Equipment> {
+  findById(id: string | number): Promise<Equipment> {
     return this.equipmentRepository.findOne(id, { relations: ['category'] });
   }
 
@@ -21,12 +23,11 @@ export class EquipmentRepositoryService {
     return this.equipmentRepository.find({ relations: ['category'] });
   }
 
-  findMany(searchQuery): Promise<Equipment[]> {
+  async findMany(searchQuery): Promise<Equipment[]> {
     return this.equipmentRepository.find({
       where: {
         ...searchQuery,
       },
-      relations: ['category'],
     });
   }
 

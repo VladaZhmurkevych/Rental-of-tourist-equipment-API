@@ -2,7 +2,7 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class EquipmentDetailsDto {
   @IsNotEmpty()
-  id: string;
+  id: string | number;
 
   @IsNotEmpty()
   @IsString()

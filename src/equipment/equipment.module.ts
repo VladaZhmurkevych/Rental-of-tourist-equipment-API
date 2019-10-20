@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { EquipmentController } from './controllers/equipment/equipment.controller';
 import { EquipmentService } from './services/equipment/equipment.service';
 import { categoriesProvider } from './providers/category.providers';
@@ -8,6 +8,7 @@ import { equipmentsProvider } from './providers/equipment.provider';
 import { EquipmentRepositoryService } from './data_services/equipment.repository.service';
 import { CategoryRepositoryService } from './data_services/category.repository.service';
 import { ExternalDataSourceModule } from '../external-data-source/external-data-source.module';
+import { EquipmentCacheService } from './services/cache/cache.service';
 
 @Module({
   imports: [DatabaseModule, ExternalDataSourceModule],
@@ -17,8 +18,10 @@ import { ExternalDataSourceModule } from '../external-data-source/external-data-
     equipmentsProvider,
     EquipmentRepositoryService,
     CategoryRepositoryService,
+    EquipmentCacheService,
     CategoryService,
     EquipmentService,
   ],
+  exports: [EquipmentRepositoryService],
 })
 export class EquipmentModule {}

@@ -21,7 +21,7 @@ export class SearchQueryBuilder {
     } else if (from) {
       this.searchQuery[field] = MoreThanOrEqual(from);
     } else if (to) {
-      this.searchQuery[field] = LessThanOrEqual(from);
+      this.searchQuery[field] = LessThanOrEqual(to);
     }
   }
 
