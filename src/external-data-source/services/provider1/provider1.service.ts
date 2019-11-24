@@ -17,11 +17,12 @@ export class Provider1Service extends AbstractDataProvider {
     super(1, 9);
   }
 
-  search(query: SearchDto): Observable<EquipmentPriceListDto[]> {
+  search(query: SearchDto, skip: number = 0): Observable<EquipmentPriceListDto[]> {
     return this.httpService
       .get<EquipmentProvider1Dto[]>(this.searchEndpoint, { params: query })
       .pipe(
         map((response): EquipmentProvider1Dto[] => response.data),
+        map((data: EquipmentProvider1Dto[]): EquipmentProvider1Dto[] => data.slice(skip, skip + 100)),
         map((data: EquipmentProvider1Dto[]) =>
           this.mapResponseToEquipmentPriceListDto(data),
         ),
@@ -74,6 +75,7 @@ export class Provider1Service extends AbstractDataProvider {
       mappedResult.originalPrice = equipment.originalPrice;
       mappedResult.rentPricePerDay = equipment.rentPricePerDay;
       mappedResult.rentPricePerHour = equipment.rentPricePerHour;
+      mappedResult.source = this.sourceNumber;
       return mappedResult;
     });
   }

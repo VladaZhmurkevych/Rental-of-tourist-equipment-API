@@ -12,11 +12,14 @@ import {
 } from 'rxjs';
 import { EquipmentCacheService } from '../../equipment/services/cache/cache.service';
 import { filter, map, skip, startWith, take, tap } from 'rxjs/operators';
-import { calculateCacheTtl } from '../../equipment/utils/equipment.helpers';
+import {
+  calculateCacheTtl, createDataRequestCacheKey,
+  createPageItemsCountCacheKey,
+} from '../../equipment/utils/equipment.helpers';
 
 export interface DataProviderInterface {
   checkCacheAndSearch(query: SearchDto);
-  search(query: SearchDto): Observable<EquipmentPriceListDto[]>;
+  search(query: SearchDto, skip: number): Observable<EquipmentPriceListDto[]>;
   getDetails(id: number): Observable<EquipmentDetailsDto>;
   mapResponseToEquipmentPriceListDto(data: unknown): EquipmentPriceListDto[];
   mapResponseToEquipmentDetailsDto(data: unknown): EquipmentDetailsDto;
@@ -25,21 +28,30 @@ export interface DataProviderInterface {
 export abstract class AbstractDataProvider implements DataProviderInterface {
   protected constructor(num: number, updateTime: number) {
     this.sourceNumber = num;
-    this.cacheService = new EquipmentCacheService();
+    this.cacheService = EquipmentCacheService.getInstance();
     this.updateTime = updateTime;
   }
   protected updateTime: number;
   protected cacheService: EquipmentCacheService;
   protected sourceNumber: number;
   public checkCacheAndSearch(query: SearchDto) {
-    const cache = this.cacheService.get(
-      `${this.sourceNumber}${JSON.stringify(query)}`,
-    );
+    let skipItems = 0;
+
+    if (query.page) {
+      const prevPageDataCacheKey = createPageItemsCountCacheKey(query, query.page - 1);
+      const prevPageCacheData = this.cacheService.get(prevPageDataCacheKey);
+      skipItems = prevPageCacheData ? prevPageCacheData[this.sourceNumber] : 0;
+      if (!prevPageCacheData && query.page && query.page > 1) { return of([]); }
+    }
+
+    const cacheKey = createDataRequestCacheKey(this.sourceNumber, query, skipItems);
+    const cache = this.cacheService.get(cacheKey) as any[];
+
     if (cache) {
       return of(cache);
     }
 
-    const searchRequest$ = this.search(query).pipe(
+    const searchRequest$ = this.search(query, skipItems).pipe(
       startWith(null),
       take(2),
     );
@@ -48,7 +60,7 @@ export abstract class AbstractDataProvider implements DataProviderInterface {
       data => {
         if (data) {
           this.cacheService.set(
-            `${this.sourceNumber}${JSON.stringify(query)}`,
+            cacheKey,
             data,
             calculateCacheTtl(this.updateTime),
           );
@@ -56,13 +68,14 @@ export abstract class AbstractDataProvider implements DataProviderInterface {
       },
     );
 
-    return combineLatest(searchRequest$, timer(1, 1000)).pipe(
+    return combineLatest(searchRequest$, timer(1, 500)).pipe(
       skip(1),
       take(1),
-      map(([search]) => search),
+      map(([search]) => search || []),
     );
   }
-  abstract search(query: SearchDto): Observable<EquipmentPriceListDto[]>;
+
+  abstract search(query: SearchDto, skip: number): Observable<EquipmentPriceListDto[]>;
   abstract getDetails(id: number): Observable<EquipmentDetailsDto>;
   abstract mapResponseToEquipmentDetailsDto(data: unknown): EquipmentDetailsDto;
   abstract mapResponseToEquipmentPriceListDto(

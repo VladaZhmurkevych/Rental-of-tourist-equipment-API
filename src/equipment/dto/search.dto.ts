@@ -27,6 +27,10 @@ export class SearchDto {
 
   @IsOptional()
   @IsNumberString()
+  page?: number;
+
+  @IsOptional()
+  @IsNumberString()
   originalPriceFrom?: number;
 
   @IsOptional()

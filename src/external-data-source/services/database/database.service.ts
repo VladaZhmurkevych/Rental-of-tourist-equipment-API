@@ -20,9 +20,9 @@ export class DatabaseService extends AbstractDataProvider {
     super(0, 9);
   }
 
-  search(search: SearchDto): Observable<EquipmentPriceListDto[]> {
+  search(search: SearchDto, skip: number = 0): Observable<EquipmentPriceListDto[]> {
     const searchQuery = mapSearchDtoToFindOperators(search);
-    return from(this.equipmentRepositoryService.findMany(searchQuery)).pipe(
+    return from(this.equipmentRepositoryService.findMany(searchQuery, skip)).pipe(
       map(
         (data: Equipment[]): EquipmentPriceListDto[] => {
           return data.map(item => ({ ...item, source: 0 }));

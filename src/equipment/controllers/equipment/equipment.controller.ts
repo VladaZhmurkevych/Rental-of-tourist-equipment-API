@@ -33,11 +33,8 @@ export class EquipmentController {
   }
 
   @Get()
-  async searchItems(@Query() searchQuery: SearchDto) {
-    console.time('Request');
-    const result = await this.equipmentService.search(searchQuery);
-    console.timeEnd('Request')
-    return result;
+  searchItems(@Query() searchQuery: SearchDto) {
+    return this.equipmentService.search(searchQuery);
   }
 
   @Post()

@@ -3,7 +3,7 @@ import { IEquipment } from '../../utils/equipment.interface';
 import Timer = NodeJS.Timer;
 
 interface Cache {
-  [key: string]: CacheRecord
+  [key: string]: CacheRecord;
 }
 
 interface CacheRecord {
@@ -11,27 +11,34 @@ interface CacheRecord {
   data: CacheRecordData;
 }
 
-export type CacheRecordData = IEquipment | IEquipment[];
+export type CacheRecordData = IEquipment | IEquipment[] | number[];
 
 @Injectable()
 export class EquipmentCacheService {
+  private static instance: EquipmentCacheService = null;
   private cache: CacheRecord[] = [];
   private checkTimer: Timer;
   private checkPeriod: number = 600;
 
-  constructor() {
+  protected constructor() {
     this.checkData();
   }
 
+  static getInstance(): EquipmentCacheService {
+    if (!EquipmentCacheService.instance) {
+      EquipmentCacheService.instance = new EquipmentCacheService();
+    }
+    return EquipmentCacheService.instance;
+  }
   private hasExpired(record: CacheRecord): boolean {
     return record.ttl > Date.now();
   }
 
   private checkData() {
-    this.cache = this.cache.filter((record: CacheRecord) =>
+    this.cache = this.cache ? this.cache.filter((record: CacheRecord) =>
       this.hasExpired(record),
-    );
-    this.checkTimer = setTimeout(this.checkData, this.checkPeriod * 1000);
+    ) : [];
+    this.checkTimer = setTimeout(this.checkData.bind(this), this.checkPeriod * 1000);
   }
 
   set(key: string, data: CacheRecordData, ttl: number = 600) {

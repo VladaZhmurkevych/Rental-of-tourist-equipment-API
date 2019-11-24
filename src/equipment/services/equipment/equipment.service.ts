@@ -20,7 +20,7 @@ export class EquipmentService {
   ) {}
 
   getOneById(id: string): Promise<IEquipment> {
-    const isFromExternalSource = id.includes('_');
+    const isFromExternalSource = id.includes('_')
     return isFromExternalSource
       ? this.externalDataSourceService.getDetails(id)
       : this.equipmentRepositoryService.findById(id);

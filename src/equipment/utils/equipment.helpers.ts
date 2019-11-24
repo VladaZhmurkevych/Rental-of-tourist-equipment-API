@@ -11,6 +11,7 @@ import {
 import { Equipment } from '../entities/equipment.entity';
 import { IEquipment } from './equipment.interface';
 import { DAY } from './constants';
+import { EquipmentPriceListDto } from '../../external-data-source/dto/EquipmentPriceList.dto';
 
 export const mapSearchDtoToFindOperators = (search: SearchDto) => {
   const searchQueryBuilder = new SearchQueryBuilder();
@@ -83,5 +84,45 @@ export const calculateCacheTtl = (updateHour: number) => {
   const min = now.getMinutes();
   const sec = now.getSeconds();
   const timeInMs = (hour * 60 * 60 + min * 60 + sec) * 1000;
-  return Date.now() + (timeInMs > updateTime ? DAY - timeInMs + updateTime : updateTime - timeInMs);
+  return (
+    Date.now() +
+    (timeInMs > updateTime
+      ? DAY - timeInMs + updateTime
+      : updateTime - timeInMs)
+  );
 };
+
+export interface PaginationData {
+  skip: number;
+  take: number;
+}
+
+export const calculatePagination = (
+  itemsPerPage: number,
+  page: number = 1,
+): PaginationData => ({
+  take: itemsPerPage,
+  skip: (page - 1) * itemsPerPage,
+});
+
+export const calculateItemsPerService = (
+  data: EquipmentPriceListDto[],
+  providersCount: number,
+  prevPageData,
+): number[] => data
+  .reduce((acc, item) => {
+    const source = item.source;
+    acc[source] = acc[source] + 1;
+    return acc;
+  }, prevPageData || new Array(providersCount).fill(0));
+
+export const queryWithoutPaging = (query: SearchDto) => {
+  const { page, ...rest } = query;
+  return rest;
+};
+
+export const createPageItemsCountCacheKey = (query: SearchDto, page) =>
+  `page${page}${JSON.stringify(queryWithoutPaging(query))}`;
+
+export const createDataRequestCacheKey = (source: number, query: SearchDto, skip: number = 0) =>
+  `${source}${JSON.stringify(queryWithoutPaging(query))}${skip}`;

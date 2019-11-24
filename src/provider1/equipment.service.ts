@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { SearchDto } from '../equipment/dto/search.dto';
 import {
   mapSearchDtoToFindOperators,
-  mapSearchDtoToFindSpecification,
 } from '../equipment/utils/equipment.helpers';
 import { IEquipment } from '../equipment/utils/equipment.interface';
 import { Connection, Repository } from 'typeorm';
@@ -16,6 +15,11 @@ export class EquipmentService {
   }
 
   async getFilteredItems(search: SearchDto): Promise<IEquipment[]> {
+    await new Promise(resolve => {
+      const delay = Math.random() * 5 * 1000; // random delay up to 20 seconds
+      // console.log(delay);
+      setTimeout(resolve, delay); // random delay up to 20 seconds
+    });
     const searchQuery = mapSearchDtoToFindOperators(search);
     return this.equipmentRepository.find(searchQuery);
   }

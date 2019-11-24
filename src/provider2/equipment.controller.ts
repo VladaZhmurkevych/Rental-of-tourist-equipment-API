@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { EquipmentService } from './equipment.service';
 import { SingleItemParamsDto } from '../equipment/dto/single_item_params.dto';
+import { SearchDto } from '../equipment/dto/search.dto';
 
 @Controller('')
 export class EquipmentController {
@@ -9,8 +10,8 @@ export class EquipmentController {
   ) {}
 
   @Get('price-list')
-  getEquipmentPriceList() {
-    return this.equipmentService.getPriceList();
+  getEquipmentPriceList(@Query() query: SearchDto) {
+    return this.equipmentService.getPriceList(query);
   }
 
   @Get('details/:id')

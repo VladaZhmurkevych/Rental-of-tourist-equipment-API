@@ -8,7 +8,6 @@ import { equipmentsProvider } from './providers/equipment.provider';
 import { EquipmentRepositoryService } from './data_services/equipment.repository.service';
 import { CategoryRepositoryService } from './data_services/category.repository.service';
 import { ExternalDataSourceModule } from '../external-data-source/external-data-source.module';
-import { EquipmentCacheService } from './services/cache/cache.service';
 
 @Module({
   imports: [DatabaseModule, ExternalDataSourceModule],
@@ -18,7 +17,6 @@ import { EquipmentCacheService } from './services/cache/cache.service';
     equipmentsProvider,
     EquipmentRepositoryService,
     CategoryRepositoryService,
-    EquipmentCacheService,
     CategoryService,
     EquipmentService,
   ],

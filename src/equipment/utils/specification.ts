@@ -108,8 +108,7 @@ export class PriceMinSpecification extends AbstractSpecification<
   }
 
   isSatisfiedBy(entity: IEquipment): boolean {
-    console.log(entity[this.field], this.price,entity[this.field] >= this.price)
-    return entity[this.field] >= this.price;
+    return +entity[this.field] >= +this.price;
   }
 }
 
