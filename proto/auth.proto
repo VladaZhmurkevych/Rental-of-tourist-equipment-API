@@ -1,0 +1,29 @@
+syntax="proto3";
+
+package auth;
+
+service AuthService {
+    rpc Authenticate (Login) returns (AuthenticatedUser) {}
+    rpc ValidateUser (Validate) returns (ValidationResult) {}
+}
+
+message ValidationResult {
+    bool isValid = 1;
+}
+
+message Login {
+    string username = 1;
+    string password = 2;
+}
+
+message Validate {
+    string token = 1;
+    int32 user = 2;
+}
+
+message AuthenticatedUser {
+    int32 id = 1;
+    string username = 2;
+    string token = 3;
+    bool success = 4;
+}
