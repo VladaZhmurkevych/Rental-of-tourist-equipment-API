@@ -2,7 +2,7 @@ import { Controller, Inject } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Repository } from 'typeorm';
 import { Booking } from './booking.entity';
-import { CreateBooking } from './booking.interfaces';
+import { BookingList, CreateBooking } from './booking.interfaces';
 
 @Controller()
 export class BookingService {
@@ -23,7 +23,7 @@ export class BookingService {
   }
 
   @GrpcMethod('BookingService', 'GetList')
-  async getList() {
+  async getList(): Promise<BookingList> {
     const data = await this.bookingRepository.find();
     console.log(data)
     return { data };

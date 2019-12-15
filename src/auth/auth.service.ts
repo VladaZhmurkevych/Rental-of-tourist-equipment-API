@@ -17,9 +17,7 @@ export class AuthService implements OnModuleInit {
   private authService: AuthMicroService;
 
   onModuleInit() {
-    console.log(this.client)
     this.authService = this.client.getService<AuthMicroService>('AuthService');
-    console.log(this.authService.validateUser({ token: '123' }))
   }
 
   authenticate(username, password) {

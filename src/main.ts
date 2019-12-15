@@ -30,8 +30,8 @@ async function bootstrap() {
   provider2App.use(helmet());
 
 
-  await authMicroservice.listen(() => console.log('Auth microservice is listening'))
-  await bookingMicroservice.listen(() => console.log('Booking microservice is listening'))
+  await authMicroservice.listen(() => console.log('Auth microservice is listening'));
+  await bookingMicroservice.listen(() => console.log('Booking microservice is listening'));
   await app.listen(process.env.PORT);
   await provider1App.listen(process.env.PORT_PROVIDER_1);
   await provider2App.listen(process.env.PORT_PROVIDER_2);
