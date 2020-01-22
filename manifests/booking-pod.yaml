@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-deployment
+  labels:
+    app: booking
+spec:
+  selector:
+    matchLabels:
+      app: booking
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: booking
+    spec:
+      containers:
+        - name: booking
+          image: mhnatyshyn/booking-please
+          ports:
+            - name: booking-service
+              containerPort: 8001
+      hostNetwork: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking-service
+spec:
+  selector:
+    app: booking
+  ports:
+    - port: 8001
+      targetPort: booking-service

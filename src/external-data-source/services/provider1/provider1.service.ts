@@ -18,9 +18,11 @@ export class Provider1Service extends AbstractDataProvider {
   }
 
   search(query: SearchDto, skip: number = 0): Observable<EquipmentPriceListDto[]> {
+    console.log('DO SEARCH')
     return this.httpService
       .get<EquipmentProvider1Dto[]>(this.searchEndpoint, { params: query })
       .pipe(
+        tap(() => { throw Error('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa') }),
         map((response): EquipmentProvider1Dto[] => response.data),
         map((data: EquipmentProvider1Dto[]): EquipmentProvider1Dto[] => data.slice(skip, skip + 100)),
         map((data: EquipmentProvider1Dto[]) =>

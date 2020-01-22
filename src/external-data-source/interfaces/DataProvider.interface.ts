@@ -11,7 +11,7 @@ import {
   Subscription,
 } from 'rxjs';
 import { EquipmentCacheService } from '../../equipment/services/cache/cache.service';
-import { filter, map, skip, startWith, take, tap } from 'rxjs/operators';
+import { filter, map, skip, startWith, take, catchError } from 'rxjs/operators';
 import {
   calculateCacheTtl, createDataRequestCacheKey,
   createPageItemsCountCacheKey,
@@ -25,6 +25,8 @@ export interface DataProviderInterface {
   mapResponseToEquipmentDetailsDto(data: unknown): EquipmentDetailsDto;
 }
 
+const MAX_RETRY_ATTEMPTS = 5;
+
 export abstract class AbstractDataProvider implements DataProviderInterface {
   protected constructor(num: number, updateTime: number) {
     this.sourceNumber = num;
@@ -35,6 +37,7 @@ export abstract class AbstractDataProvider implements DataProviderInterface {
   protected cacheService: EquipmentCacheService;
   protected sourceNumber: number;
   public checkCacheAndSearch(query: SearchDto) {
+    let retryAttempts = 0;
     let skipItems = 0;
 
     if (query.page) {
@@ -51,7 +54,18 @@ export abstract class AbstractDataProvider implements DataProviderInterface {
       return of(cache);
     }
 
-    const searchRequest$ = this.search(query, skipItems).pipe(
+    const createSearchRequest = () => this.search(query, skipItems).pipe(
+      catchError(() => {
+        if (retryAttempts > MAX_RETRY_ATTEMPTS) { return []; }
+        console.log('Source', this.sourceNumber, 'Retry', retryAttempts);
+        retryAttempts += 1;
+        return createSearchRequest();
+      }),
+    );
+
+    const baseSearchRequest$ = createSearchRequest();
+
+    const searchRequest$ = baseSearchRequest$.pipe(
       startWith(null),
       take(2),
     );

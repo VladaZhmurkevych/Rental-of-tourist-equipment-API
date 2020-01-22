@@ -1,6 +1,6 @@
 import { Body, Controller, Injectable, OnModuleInit, Post, Request } from '@nestjs/common';
 import { Client, ClientGrpc, ClientProxy, GrpcOptions } from '@nestjs/microservices';
-import { AuthMicroserviceOptions } from '../microservices/auth/microservice.options';
+import { AuthMicroserviceOptions, AuthMicroserviceOptionsExternal } from '../microservices/auth/microservice.options';
 import { Observable } from 'rxjs';
 import { LoginData, ValidateTokenData } from '../microservices/auth/auth.interfaces';
 
@@ -11,7 +11,7 @@ interface AuthMicroService {
 
 @Injectable()
 export class AuthService implements OnModuleInit {
-  @Client(AuthMicroserviceOptions)
+  @Client(AuthMicroserviceOptionsExternal)
   private client: ClientGrpc;
 
   private authService: AuthMicroService;

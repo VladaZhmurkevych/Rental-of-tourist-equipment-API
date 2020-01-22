@@ -1,7 +1,10 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { BookingMicroserviceOptions } from '../microservices/booking/microservice.options';
+import {
+  BookingMicroserviceOptions,
+  BookingMicroserviceOptionsExternal
+} from '../microservices/booking/microservice.options';
 import { BookingDto } from './booking.dto';
 import { CreateBooking } from '../microservices/booking/booking.interfaces';
 import { tap } from 'rxjs/operators';
@@ -13,7 +16,7 @@ interface BookingMicroService {
 
 @Injectable()
 export class BookingService implements OnModuleInit {
-  @Client(BookingMicroserviceOptions)
+  @Client(BookingMicroserviceOptionsExternal)
   private client: ClientGrpc;
 
   private bookingService: BookingMicroService;

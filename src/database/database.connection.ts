@@ -2,6 +2,7 @@ import { Connection, createConnection } from 'typeorm';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: `${__dirname}/../../.env` });
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+console.log({ DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME })
 
 export class DataBaseConnection {
   private readonly connection: Promise<Connection> = null;
@@ -10,7 +11,7 @@ export class DataBaseConnection {
   private constructor() {
     this.connection = createConnection({
       type: 'postgres',
-      host: DB_HOST,
+      host: '10.0.2.2',
       port: parseInt(DB_PORT, 10),
       username: DB_USER,
       password: DB_PASSWORD,
